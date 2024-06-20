@@ -3,7 +3,10 @@
 #include <vector>
 #include <chrono>
 #include <random>
-//#include "Bullet.h"
+#include "Bullet.h"
+#include "Enemy.h"
+#include "SpaseSheep.h"
+#include "EndOfGame.h"
 
 using namespace sf;
 
@@ -11,70 +14,12 @@ const int sizeX = 600;
 const int sizeY = 900;
 const int numShot = 5;
 const int numEnemy = 50;
+RenderWindow win(VideoMode(sizeX, sizeY), "SpaceBattle", Style::None);
 
-class Enemy : public Sprite
-{
-private:
-	const double speed;
-	int healthPoints;
-public:
-	bool visible;
-	Enemy() : speed(0.15), healthPoints(2), visible(false) {};
-	void Move(double elapsed)
-	{
-		move(0, speed * elapsed);
-	}
-	void Wound()
-	{
-		healthPoints--;
-		if (healthPoints == 0)
-		{
-			visible = false;
-			healthPoints = 3;
-		}
-	}
-};
-
-class Bullet : public CircleShape
-{
-private:
-	const double speed;
-	const int power;
-public:
-	bool visible;
-	Bullet() : power(10), speed(sizeX*1.2/500), visible(false)
-	{
-		setRadius(3);
-		setFillColor(Color::White);
-		setOrigin(10, 10);
-	}
-	void fly(double elapsed)
-	{
-		move(0, -speed * elapsed);
-	}
-};
-
-class SpaseShep : public Sprite
-{
-private:
-	const double speed;
-	const int power;
-public:
-	SpaseShep() : speed(0.5), power(10) {}
-	void goLeft(double elapsed)
-	{
-		this->move(-speed * elapsed, 0);
-	}
-	void goRight(double elapsed)
-	{
-		this->move(speed * elapsed, 0);
-	}
-};
 
 int main()
 {
 	srand(time(0));
-	RenderWindow win(VideoMode(sizeX,sizeY),"SpaceBattle", Style::None);
 	win.setFramerateLimit(60);
 
 	Texture textureBackground;
@@ -97,17 +42,14 @@ int main()
 	for (int i = 0; i < numEnemy; i++)
 	{
 		enemies[i].setTexture(textureEnemy);
-		enemies[i].setOrigin(25, 25);
 	}
 
 	SpaseShep sheep;
 	sheep.setTexture(textureSpaceSheep);
-	sheep.setPosition(sizeX/2, sizeY-60);
-	sheep.setOrigin(60,50);
 	
 	Clock clk;
 
-	auto start= std::chrono::high_resolution_clock::now();
+	auto start = std::chrono::high_resolution_clock::now();
 	int enIterator{ 0 };
 
 	bool lose = false;
@@ -152,10 +94,10 @@ int main()
 
 		Vector2f pos = sheep.getPosition();
 		if (pos.x > sizeX-50) sheep.setPosition(sizeX-50, pos.y);
-		else if (pos.x < 50) sheep.setPosition(50, pos.y);
+		else if (pos.x < 60) sheep.setPosition(60, pos.y);
 
 
-		auto now= std::chrono::high_resolution_clock::now();
+		auto now = std::chrono::high_resolution_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - start);
 		if (duration.count() >= 700 && enIterator<numEnemy)
 		{
@@ -165,9 +107,7 @@ int main()
 			enemies[enIterator].setPosition(x, 30);
 			enIterator++;
 			start = now;
-			//if (enIterator == numEnemy) enIterator = 0;
 		}
-
 
 
 		for (int i = 0; i < numShot; i++)
@@ -215,7 +155,6 @@ int main()
 		}
 
 		win.draw(background);
-
 		for (int i = 0; i < numShot; i++)
 		{
 			win.draw(shots[i]);
@@ -230,46 +169,5 @@ int main()
 		
 	}
 
-	Sprite textEOG;
-	int k = 0;
-	bool textur=false;
-	while (win.isOpen())
-	{
-		Event ev;
-		while (win.pollEvent(ev))
-		{
-			if (ev.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Escape)) win.close();
-		}
-		
-		Texture textur1;
-		Texture textur2;
-		if(lose)
-		{
-			textur1.loadFromFile("images/lose1.png");
-			textur2.loadFromFile("images/lose2.png");
-		}
-		else
-		{
-			textur1.loadFromFile("images/win1.png");
-			textur2.loadFromFile("images/win2.png");
-		}
-		
-
-		textEOG.setOrigin(0, 0);
-		textEOG.setPosition(0, 300);
-		k++;
-		if (k == 10)
-		{
-			if (textur) textEOG.setTexture(textur1);
-			else textEOG.setTexture(textur2);
-			k = 0;
-			textur = !textur;
-		}
-		textur = !textur;
-
-		win.clear(Color::Black);
-		win.draw(textEOG); 
-		win.display();
-	}
-
+	EndOfGame(lose);
 }
