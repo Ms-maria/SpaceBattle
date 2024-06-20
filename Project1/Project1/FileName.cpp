@@ -109,8 +109,8 @@ int main()
 
 	auto start= std::chrono::high_resolution_clock::now();
 	int enIterator{ 0 };
-	
-	bool victory = false;
+
+	bool lose = false;
 	while(win.isOpen())
 	{
 		double elapsed = clk.restart().asMilliseconds();
@@ -191,8 +191,6 @@ int main()
 			}
 		}
 
-		bool lose = false;
-
 		for (int i = 0; i < numEnemy; i++)
 		{
 			if (std::abs(enemies[i].getPosition().y - sheep.getPosition().y)<=10)
@@ -202,7 +200,19 @@ int main()
 			}
 		}
 		if (lose) break;
-
+		if (enIterator == numEnemy)
+		{
+			bool isallkilled = true;
+			for (int i = 0; i < numEnemy; i++)
+			{
+				if (enemies[i].visible == true)
+				{
+					isallkilled = false; 
+					break;
+				}
+			}
+			if(isallkilled) break;
+		}
 
 		win.draw(background);
 
@@ -220,39 +230,46 @@ int main()
 		
 	}
 
-	Sprite lose;
+	Sprite textEOG;
 	int k = 0;
 	bool textur=false;
 	while (win.isOpen())
 	{
-		if (victory) break;
 		Event ev;
 		while (win.pollEvent(ev))
 		{
 			if (ev.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Escape)) win.close();
 		}
 		
-		Texture lose1;
-		lose1.loadFromFile("images/lose1.png");
-		Texture lose2;
-		lose2.loadFromFile("images/lose2.png");
+		Texture textur1;
+		Texture textur2;
+		if(lose)
+		{
+			textur1.loadFromFile("images/lose1.png");
+			textur2.loadFromFile("images/lose2.png");
+		}
+		else
+		{
+			textur1.loadFromFile("images/win1.png");
+			textur2.loadFromFile("images/win2.png");
+		}
+		
 
-		lose.setOrigin(0, 0);
-		lose.setPosition(0, 300);
+		textEOG.setOrigin(0, 0);
+		textEOG.setPosition(0, 300);
 		k++;
 		if (k == 10)
 		{
-			if (textur) lose.setTexture(lose1);
-			else lose.setTexture(lose2);
+			if (textur) textEOG.setTexture(textur1);
+			else textEOG.setTexture(textur2);
 			k = 0;
 			textur = !textur;
 		}
 		textur = !textur;
 
 		win.clear(Color::Black);
-		win.draw(lose); 
+		win.draw(textEOG); 
 		win.display();
 	}
-
 
 }
