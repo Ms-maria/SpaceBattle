@@ -1,6 +1,6 @@
 #include "EndOfGame.h"
 
-void EndOfGame(bool lose)
+void EndOfGame(bool islose)
 {
 	Sprite textEOG;
 	int k = 0;
@@ -15,7 +15,7 @@ void EndOfGame(bool lose)
 
 		Texture textur1;
 		Texture textur2;
-		if (lose)
+		if (islose)
 		{
 			textur1.loadFromFile("images/lose1.png");
 			textur2.loadFromFile("images/lose2.png");

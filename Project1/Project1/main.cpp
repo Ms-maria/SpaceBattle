@@ -7,13 +7,14 @@
 #include "Enemy.h"
 #include "SpaseSheep.h"
 #include "EndOfGame.h"
+#include "StartOfGame.h"
 
 using namespace sf;
 
 const int sizeX = 600;
 const int sizeY = 900;
+int numEnemy;
 const int numShot = 5;
-const int numEnemy = 50;
 RenderWindow win(VideoMode(sizeX, sizeY), "SpaceBattle", Style::None);
 
 
@@ -25,9 +26,6 @@ int main()
 	Texture textureBackground;
 	textureBackground.loadFromFile("images/starsky3.jpg");
 
-	Texture textureSpaceSheep;
-	textureSpaceSheep.loadFromFile("images/spacesheep.png");
-
 	Texture textureEnemy;
 	textureEnemy.loadFromFile("images/enemy.png");
 
@@ -36,12 +34,32 @@ int main()
 	background.setOrigin(0, 0);
 	background.setPosition(0, 0);
 
+
+	bool level = StartOfGame();
+
+	int health;
+	if (level)
+	{
+		numEnemy = 70;
+		health = 1;
+	}
+	else
+	{
+		numEnemy = 40;
+		health = 2;
+	}
+
+
+	Texture textureSpaceSheep;
+	textureSpaceSheep.loadFromFile("images/spacesheep.png");
+
 	Bullet shots[numShot];
 
-	Enemy enemies[numEnemy];
+	Enemy** enemies=new Enemy*[numEnemy];
 	for (int i = 0; i < numEnemy; i++)
 	{
-		enemies[i].setTexture(textureEnemy);
+		enemies[i]=new Enemy(health);
+		enemies[i]->setTexture(textureEnemy);
 	}
 
 	SpaseShep sheep;
@@ -49,10 +67,10 @@ int main()
 	
 	Clock clk;
 
-	auto start = std::chrono::high_resolution_clock::now();
+	auto begin = std::chrono::high_resolution_clock::now();
 	int enIterator{ 0 };
 
-	bool lose = false;
+	bool islose = false;
 	while(win.isOpen())
 	{
 		double elapsed = clk.restart().asMilliseconds();
@@ -83,8 +101,8 @@ int main()
 
 		for (int i = 0; i < numEnemy; i++)
 		{
-			if (enemies[i].visible) enemies[i].Move(elapsed);
-			if (enemies[i].getPosition().y <= 0) enemies[i].visible = false;
+			if (enemies[i]->visible) enemies[i]->Move(elapsed);
+			if (enemies[i]->getPosition().y <= 0) enemies[i]->visible = false;
 		}
 		
 		for (int i = 0; i < numShot; i++)
@@ -98,15 +116,15 @@ int main()
 
 
 		auto now = std::chrono::high_resolution_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - start);
+		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - begin);
 		if (duration.count() >= 700 && enIterator<numEnemy)
 		{
-			enemies[enIterator].visible = true;
+			enemies[enIterator]->visible = true;
 			int x;
 			x = 60 + rand() % (sizeX-120);
-			enemies[enIterator].setPosition(x, 30);
+			enemies[enIterator]->setPosition(x, 30);
 			enIterator++;
-			start = now;
+			begin = now;
 		}
 
 
@@ -115,17 +133,17 @@ int main()
 			if (!shots[i].visible) continue;
 			for (int j = 0; j < numEnemy; j++)
 			{
-				if (!enemies[j].visible) continue;
+				if (!enemies[j]->visible) continue;
 				double x1, x2, y1, y2;
 				x1 = shots[i].getPosition().x;
 				y1= shots[i].getPosition().y;
-				x2 = enemies[j].getPosition().x;
-				y2= enemies[j].getPosition().y;
+				x2 = enemies[j]->getPosition().x;
+				y2= enemies[j]->getPosition().y;
 				double d = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
 				if (d < 45 * 45)
 				{
 					shots[i].visible = false;
-					enemies[j].Wound();
+					enemies[j]->Wound();
 					break;
 				}
 			}
@@ -133,19 +151,19 @@ int main()
 
 		for (int i = 0; i < numEnemy; i++)
 		{
-			if (std::abs(enemies[i].getPosition().y - sheep.getPosition().y)<=10)
+			if (std::abs(enemies[i]->getPosition().y - sheep.getPosition().y)<=10)
 			{
-				lose = true;
+				islose = true;
 				break;
 			}
 		}
-		if (lose) break;
+		if (islose) break;
 		if (enIterator == numEnemy)
 		{
 			bool isallkilled = true;
 			for (int i = 0; i < numEnemy; i++)
 			{
-				if (enemies[i].visible == true)
+				if (enemies[i]->visible == true)
 				{
 					isallkilled = false; 
 					break;
@@ -161,7 +179,7 @@ int main()
 		}
 		for (int i = 0; i < numEnemy; i++)
 		{
-			if (enemies[i].visible) win.draw(enemies[i]);
+			if (enemies[i]->visible) win.draw(*enemies[i]);
 		}
 		win.draw(sheep);
 
@@ -169,5 +187,12 @@ int main()
 		
 	}
 
-	EndOfGame(lose);
+	for (int i = 0; i < numEnemy; ++i) 
+	{
+		delete enemies[i];
+	}
+
+	delete[] enemies;
+
+	EndOfGame(islose);
 }

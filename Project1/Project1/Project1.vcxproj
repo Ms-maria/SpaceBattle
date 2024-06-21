@@ -135,12 +135,14 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SpaseSheep.cpp" />
+    <ClCompile Include="StartOfGame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="EndOfGame.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="SpaseSheep.h" />
+    <ClInclude Include="StartOfGame.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,7 +10,7 @@ private:
 	int healthPoints;
 public:
 	bool visible;
-	Enemy() : speed(0.15), healthPoints(2), visible(false) 
+	Enemy(int health) : speed(0.15), healthPoints(health), visible(false)
 	{
 		setOrigin(25, 25);
 	}
