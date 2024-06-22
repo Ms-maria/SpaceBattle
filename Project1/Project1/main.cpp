@@ -8,6 +8,9 @@
 #include "SpaseSheep.h"
 #include "EndOfGame.h"
 #include "StartOfGame.h"
+#include "Score.h"
+#define KILL 3
+#define HURT 1
 
 using namespace sf;
 
@@ -34,20 +37,23 @@ int main()
 	background.setOrigin(0, 0);
 	background.setPosition(0, 0);
 
-
 	bool level = StartOfGame();
 
 	int health;
-	if (level)
+	int m=1;
+	if (!level)
 	{
-		numEnemy = 70;
+		numEnemy = 40;
 		health = 1;
 	}
 	else
 	{
-		numEnemy = 40;
+		numEnemy = 70;
 		health = 2;
+		m = 2;
 	}
+
+	Score score(m);
 
 
 	Texture textureSpaceSheep;
@@ -136,14 +142,15 @@ int main()
 				if (!enemies[j]->visible) continue;
 				double x1, x2, y1, y2;
 				x1 = shots[i].getPosition().x;
-				y1= shots[i].getPosition().y;
+				y1 = shots[i].getPosition().y;
 				x2 = enemies[j]->getPosition().x;
-				y2= enemies[j]->getPosition().y;
+				y2 = enemies[j]->getPosition().y;
 				double d = (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1);
 				if (d < 45 * 45)
 				{
 					shots[i].visible = false;
-					enemies[j]->Wound();
+					if (enemies[j]->Wound()) score.Add(KILL);
+					else score.Add(HURT);
 					break;
 				}
 			}
@@ -194,5 +201,5 @@ int main()
 
 	delete[] enemies;
 
-	EndOfGame(islose);
+	EndOfGame(islose, score.getScore());
 }

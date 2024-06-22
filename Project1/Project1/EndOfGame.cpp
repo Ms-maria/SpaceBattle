@@ -1,7 +1,31 @@
 #include "EndOfGame.h"
 
-void EndOfGame(bool islose)
+void EndOfGame(bool islose,const std::vector<int> score)
 {
+	const int x{ 140 }, y{ 650 };
+	const int n = score.size();
+
+	Sprite  numbers[10];
+	Texture textureNumbers[10];
+	for (int i = 0; i < 10; i++)
+	{
+		char c = i + '0';
+		std::string path = "images/";
+		path.push_back(c);
+		path+=".png";
+		textureNumbers[i].loadFromFile(path);
+		numbers[i].setOrigin(0, 0);
+		numbers[i].setPosition(x, y);
+		numbers[i].setTexture(textureNumbers[i]);
+	}
+
+	Texture textureScore;
+	textureScore.loadFromFile("images/score.png");
+
+	Sprite spriteScore;
+	spriteScore.setTexture(textureScore);
+	spriteScore.setOrigin(0, 0);
+	spriteScore.setPosition(125,550);
 	Sprite textEOG;
 	int k = 0;
 	bool textur = false;
@@ -40,6 +64,16 @@ void EndOfGame(bool islose)
 
 		win.clear(Color::Black);
 		win.draw(textEOG);
+		win.draw(spriteScore);
+		for (int i = n-1; i >=0; i--)
+		{
+			numbers[score[i]].setPosition(x+((n-i)*70), y);
+			win.draw(numbers[score[i]]);
+		}
+		if (n == 0)
+		{
+			win.draw(numbers[0]);
+		}
 		win.display();
 	}
 }
