@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+//#include <SFMl/Audio.hpp>
 #include <iostream>
 #include <vector>
 #include <chrono>
@@ -20,11 +21,37 @@ int numEnemy;
 const int numShot = 5;
 RenderWindow win(VideoMode(sizeX, sizeY), "SpaceBattle", Style::None);
 
+//class Sounds
+//{
+//private:
+//	Sound shot;
+//	Sounds() 
+//	{
+//		SoundBuffer shotBuffer;
+//		shotBuffer.loadFromFile("sounds/shot.mp3");
+//		shot.setBuffer(shotBuffer);
+//	}
+//	~Sounds() {}
+//	Sounds(const Sounds&) = delete;
+//	Sounds& operator=(const Sounds&) = delete;
+//public:
+//	static Sounds& getInstance() 
+//	{
+//		static Sounds instance;
+//		return instance;
+//	}
+//	void Shot()
+//	{
+//		shot.play();
+//	}
+//};
 
 int main()
 {
 	srand(time(0));
 	win.setFramerateLimit(60);
+
+	//Sounds& sound = Sounds::getInstance();
 
 	Texture textureBackground;
 	textureBackground.loadFromFile("images/starsky3.jpg");
@@ -96,12 +123,20 @@ int main()
 		if(Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left)) sheep.goLeft(elapsed);
 		if (Keyboard::isKeyPressed(Keyboard::Space))
 		{
-			if (!shots[0].visible && !shots[numShot - 1].visible) shots[0].visible = true;
+			if (!shots[0].visible && !shots[numShot - 1].visible)
+			{
+				shots[0].visible = true;
+				//sound.Shot();
+			}
 			else if (!shots[0].visible && shots[0].getPosition().y < sizeY / numShot) shots[0].visible = true;
 
 			for (int i = 1; i < numShot; i++)
 			{
-				if (shots[i - 1].visible && shots[i - 1].getPosition().y < sizeY / numShot) shots[i].visible = true;
+				if (shots[i - 1].visible && shots[i - 1].getPosition().y < sizeY / numShot)
+				{
+					shots[i].visible = true;
+					//sound.Shot();
+				}
 			}
 		}
 
