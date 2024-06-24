@@ -3,13 +3,12 @@ void Enemy::Move(double elapsed)
 {
 	move(0, speed * elapsed);
 }
-bool Enemy::Wound()
+void Enemy::Wound()
 {
 	healthPoints--;
 	if (healthPoints == 0)
 	{
 		visible = false;
-		return true;
+		healthPoints = 2;
 	}
-	return false;
 }

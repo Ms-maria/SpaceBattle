@@ -15,7 +15,7 @@ public:
 		setOrigin(25, 25);
 	}
 	void Move(double elapsed);
-	bool Wound();
+	void Wound();
 };
 
 

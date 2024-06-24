@@ -134,7 +134,6 @@
     <ClCompile Include="EndOfGame.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Score.cpp" />
     <ClCompile Include="SpaseSheep.cpp" />
     <ClCompile Include="StartOfGame.cpp" />
   </ItemGroup>
@@ -142,7 +141,6 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="EndOfGame.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="Score.h" />
     <ClInclude Include="SpaseSheep.h" />
     <ClInclude Include="StartOfGame.h" />
   </ItemGroup>
