@@ -68,12 +68,12 @@ int main()
 	if (level)
 	{
 		numEnemy = 70;
-		health = 1;
+		health = 2;
 	}
 	else
 	{
 		numEnemy = 40;
-		health = 2;
+		health = 1;
 	}
 
 
