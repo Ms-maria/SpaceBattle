@@ -9,6 +9,6 @@ void Enemy::Wound()
 	if (healthPoints == 0)
 	{
 		visible = false;
-		healthPoints = 2;
+		healthPoints = fullhealth;
 	}
 }

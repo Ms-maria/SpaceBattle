@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 #include <vector>
 #include <chrono>
@@ -26,7 +27,6 @@ int main()
 	srand(time(0));
 	win.setFramerateLimit(60);
 
-
 	Texture textureBackground;
 	textureBackground.loadFromFile("images/starsky3.jpg");
 
@@ -38,7 +38,21 @@ int main()
 	background.setOrigin(0, 0);
 	background.setPosition(0, 0);
 
-	bool level = StartOfGame();
+	int x = StartOfGame();
+	bool level=false, endlessmode=false;
+	if (x == 10)
+	{
+		level = true;
+	}
+	else if (x == 11)
+	{
+		level = true;
+		endlessmode = true;
+	}
+	else if (x == 1)
+	{
+		endlessmode = true;
+	}
 
 	int health, mult;
 	if (level)
@@ -132,12 +146,15 @@ int main()
 		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - begin);
 		if (duration.count() >= 700 && enIterator<numEnemy)
 		{
-			enemies[enIterator]->visible = true;
-			int x;
-			x = 60 + rand() % (sizeX-120);
-			enemies[enIterator]->setPosition(x, 30);
-			enIterator++;
-			begin = now;
+			if (enemies[enIterator]->visible == false)
+			{
+				enemies[enIterator]->visible = true;
+				int x;
+				x = 60 + rand() % (sizeX - 120);
+				enemies[enIterator]->setPosition(x, 30);
+				enIterator++;
+				begin = now;
+			}		
 		}
 
 
@@ -177,6 +194,10 @@ int main()
 			}
 		}
 		if (islose) break;
+		if (endlessmode && enIterator == numEnemy)
+		{
+			enIterator = 0;
+		}
 		if (enIterator == numEnemy)
 		{
 			bool isallkilled = true;

@@ -5,4 +5,4 @@ using namespace sf;
 
 extern RenderWindow win;
 
-bool StartOfGame();
+int StartOfGame();
