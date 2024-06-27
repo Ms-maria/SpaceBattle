@@ -1,5 +1,4 @@
 #include <SFML/Graphics.hpp>
-//#include <SFMl/Audio.hpp>
 #include <iostream>
 #include <vector>
 #include <chrono>
@@ -9,6 +8,7 @@
 #include "SpaseSheep.h"
 #include "EndOfGame.h"
 #include "StartOfGame.h"
+#include "Score.h"
 
 using namespace sf;
 
@@ -18,37 +18,14 @@ int numEnemy;
 const int numShot = 5;
 RenderWindow win(VideoMode(sizeX, sizeY), "SpaceBattle", Style::None);
 
-//class Sounds
-//{
-//private:
-//	Sound shot;
-//	Sounds() 
-//	{
-//		SoundBuffer shotBuffer;
-//		shotBuffer.loadFromFile("sounds/shot.mp3");
-//		shot.setBuffer(shotBuffer);
-//	}
-//	~Sounds() {}
-//	Sounds(const Sounds&) = delete;
-//	Sounds& operator=(const Sounds&) = delete;
-//public:
-//	static Sounds& getInstance() 
-//	{
-//		static Sounds instance;
-//		return instance;
-//	}
-//	void Shot()
-//	{
-//		shot.play();
-//	}
-//};
+
+
 
 int main()
 {
 	srand(time(0));
 	win.setFramerateLimit(60);
 
-	//Sounds& sound = Sounds::getInstance();
 
 	Texture textureBackground;
 	textureBackground.loadFromFile("images/starsky3.jpg");
@@ -61,20 +38,23 @@ int main()
 	background.setOrigin(0, 0);
 	background.setPosition(0, 0);
 
-
 	bool level = StartOfGame();
 
-	int health;
+	int health, mult;
 	if (level)
 	{
 		numEnemy = 70;
 		health = 2;
+		mult = 3;
 	}
 	else
 	{
 		numEnemy = 40;
 		health = 1;
+		mult = 1;
 	}
+
+	Score score(mult);
 
 
 	Texture textureSpaceSheep;
@@ -120,7 +100,6 @@ int main()
 			if (!shots[0].visible && !shots[numShot - 1].visible)
 			{
 				shots[0].visible = true;
-				//sound.Shot();
 			}
 			else if (!shots[0].visible && shots[0].getPosition().y < sizeY / numShot) shots[0].visible = true;
 
@@ -129,7 +108,6 @@ int main()
 				if (shots[i - 1].visible && shots[i - 1].getPosition().y < sizeY / numShot)
 				{
 					shots[i].visible = true;
-					//sound.Shot();
 				}
 			}
 		}
@@ -179,6 +157,12 @@ int main()
 				{
 					shots[i].visible = false;
 					enemies[j]->Wound();
+					int x = 1;
+					if (!enemies[j]->visible)
+					{
+						x++;
+					}
+					score.Add(x);
 					break;
 				}
 			}
@@ -229,5 +213,5 @@ int main()
 
 	delete[] enemies;
 
-	EndOfGame(islose);
+	EndOfGame(islose, score);
 }

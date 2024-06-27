@@ -134,6 +134,7 @@
     <ClCompile Include="EndOfGame.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="SpaseSheep.cpp" />
     <ClCompile Include="StartOfGame.cpp" />
   </ItemGroup>
@@ -141,6 +142,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="EndOfGame.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="SpaseSheep.h" />
     <ClInclude Include="StartOfGame.h" />
   </ItemGroup>
@@ -152,7 +154,8 @@
     <Import Project="..\packages\sfml_window.redist.2.6.0\build\native\sfml_window.redist.targets" Condition="Exists('..\packages\sfml_window.redist.2.6.0\build\native\sfml_window.redist.targets')" />
     <Import Project="..\packages\sfml_window.2.6.0\build\native\sfml_window.targets" Condition="Exists('..\packages\sfml_window.2.6.0\build\native\sfml_window.targets')" />
     <Import Project="..\packages\sfml_graphics.2.6.0\build\native\sfml_graphics.targets" Condition="Exists('..\packages\sfml_graphics.2.6.0\build\native\sfml_graphics.targets')" />
-    
+    <Import Project="..\packages\sfml-audio.redist.2.4.2.0\build\native\sfml-audio.redist.targets" Condition="Exists('..\packages\sfml-audio.redist.2.4.2.0\build\native\sfml-audio.redist.targets')" />
+    <Import Project="..\packages\sfml-audio.2.4.2.0\build\native\sfml-audio.targets" Condition="Exists('..\packages\sfml-audio.2.4.2.0\build\native\sfml-audio.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -166,5 +169,7 @@
     <Error Condition="!Exists('..\packages\sfml_graphics.2.6.0\build\native\sfml_graphics.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml_graphics.2.6.0\build\native\sfml_graphics.targets'))" />
     <Error Condition="!Exists('..\packages\sfml-system.redist.2.4.2.0\build\native\sfml-system.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml-system.redist.2.4.2.0\build\native\sfml-system.redist.targets'))" />
     <Error Condition="!Exists('..\packages\sfml-system.2.4.2.0\build\native\sfml-system.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml-system.2.4.2.0\build\native\sfml-system.targets'))" />
+    <Error Condition="!Exists('..\packages\sfml-audio.redist.2.4.2.0\build\native\sfml-audio.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml-audio.redist.2.4.2.0\build\native\sfml-audio.redist.targets'))" />
+    <Error Condition="!Exists('..\packages\sfml-audio.2.4.2.0\build\native\sfml-audio.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\sfml-audio.2.4.2.0\build\native\sfml-audio.targets'))" />
   </Target>
 </Project>

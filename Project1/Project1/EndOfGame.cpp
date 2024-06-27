@@ -1,8 +1,38 @@
 #include "EndOfGame.h"
 
-void EndOfGame(bool islose)
+void EndOfGame(bool islose, Score score)
 {
-	Sprite textEOG;
+	Sprite WinOrLose;
+	Sprite scores;
+	Texture scoreTexture;
+	scoreTexture.loadFromFile("images/score.png");
+	scores.setTexture(scoreTexture);
+	scores.setOrigin(0, 0);
+	scores.setPosition(150, 400);
+
+	const int x = 200, y = 450;
+	const int num = 10;
+	Sprite numbers[num];
+	Texture texturnum[num];
+	
+	for (int i = 0; i < num; i++)
+	{
+		std::string file{ "images/" };
+		file.push_back('0' + i);
+		file += ".png";
+		texturnum[i].loadFromFile(file);
+		numbers[i].setTexture(texturnum[i]);
+		numbers[i].setOrigin(0, 0);
+	}
+
+	std::vector<int> digits = score.GetNumbers();
+
+	for (int i = 0; i < digits.size(); i++)
+	{
+		numbers[digits[i]].setPosition(i * 40 + x, y);
+	}
+
+
 	int k = 0;
 	bool textur = false;
 	while (win.isOpen())
@@ -26,20 +56,25 @@ void EndOfGame(bool islose)
 			textur2.loadFromFile("images/win2.png");
 		}
 
-		textEOG.setOrigin(0, 0);
-		textEOG.setPosition(0, 300);
+		WinOrLose.setOrigin(0, 0);
+		WinOrLose.setPosition(0, 200);
 		k++;
 		if (k == 10)
 		{
-			if (textur) textEOG.setTexture(textur1);
-			else textEOG.setTexture(textur2);
+			if (textur) WinOrLose.setTexture(textur1);
+			else WinOrLose.setTexture(textur2);
 			k = 0;
 			textur = !textur;
 		}
 		textur = !textur;
 
 		win.clear(Color::Black);
-		win.draw(textEOG);
+		win.draw(WinOrLose);
+		win.draw(scores);
+		for (int i = 0; i < digits.size(); i++)
+		{
+			win.draw(numbers[digits[i]]);
+		}
 		win.display();
 	}
 }
