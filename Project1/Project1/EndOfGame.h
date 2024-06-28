@@ -7,4 +7,4 @@ using namespace sf;
 
 extern RenderWindow win;
 
-void EndOfGame(bool lose,Score score);
+bool EndOfGame(bool lose,Score score);

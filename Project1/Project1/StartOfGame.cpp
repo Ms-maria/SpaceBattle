@@ -50,7 +50,12 @@ int StartOfGame()
 		Event ev;
 		while (win.pollEvent(ev))
 		{
-			if (ev.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Escape)) win.close();
+			if (ev.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Escape))
+			{
+				win.close();
+				return -1;
+			}
+
 		}
 		if (ev.type == sf::Event::MouseButtonPressed)
 		{

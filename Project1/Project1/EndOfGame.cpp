@@ -1,14 +1,25 @@
 #include "EndOfGame.h"
 
-void EndOfGame(bool islose, Score score)
+bool EndOfGame(bool islose, Score score)
 {
 	Sprite WinOrLose;
 	Sprite scores;
+	Sprite again;
+
 	Texture scoreTexture;
 	scoreTexture.loadFromFile("images/score.png");
 	scores.setTexture(scoreTexture);
 	scores.setOrigin(0, 0);
 	scores.setPosition(150, 400);
+
+	Texture againTexture;
+	againTexture.loadFromFile("images/again.png");
+
+	again.setOrigin(0, 0);
+	again.setTexture(againTexture);
+	again.setPosition(100, 700);
+
+	bool isagain = false;
 
 	const int x = 200, y = 450;
 	const int num = 10;
@@ -40,7 +51,23 @@ void EndOfGame(bool islose, Score score)
 		Event ev;
 		while (win.pollEvent(ev))
 		{
-			if (ev.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Escape)) win.close();
+			if (ev.type == Event::Closed || Keyboard::isKeyPressed(Keyboard::Escape))
+			{
+				win.close();
+				return false;
+			}
+		}
+		if (ev.type == sf::Event::MouseButtonPressed)
+		{
+			if (ev.mouseButton.button == sf::Mouse::Left)
+			{
+				int x = ev.mouseButton.x;
+				int y = ev.mouseButton.y;
+				if (x >= 100 && x <= 500 && y >= 700 && y <= 800)
+				{
+					return true;
+				}
+			}
 		}
 
 		Texture textur1;
@@ -71,6 +98,7 @@ void EndOfGame(bool islose, Score score)
 		win.clear(Color::Black);
 		win.draw(WinOrLose);
 		win.draw(scores);
+		win.draw(again);
 		for (int i = 0; i < digits.size(); i++)
 		{
 			win.draw(numbers[digits[i]]);
